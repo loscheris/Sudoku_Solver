@@ -1,0 +1,5 @@
+Summarise your findings here (see specification).
+
+Mystery1: hard
+Mystery2: no solution
+Mystery3: extremely hard
