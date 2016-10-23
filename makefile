@@ -8,4 +8,4 @@ sudoku.o: sudoku.h sudoku.cpp
 	g++ -Wall -g -c sudoku.cpp
 
 clean:
-	rm -f *.o exe//
+	rm -f *.o exe
