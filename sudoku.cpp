@@ -7,8 +7,7 @@
 
 using namespace std;
 
-/* You are pre-supplied with the functions below. Add your own
-   function definitions to the end of this file. */
+/* You are pre-supplied with the functions below. Add your own function definitions to the end of this file. */
 
 /* pre-supplied function to load a Sudoku board from a file */
 void load_board(const char* filename, char board[9][9]) {
@@ -67,11 +66,10 @@ void display_board(const char board[9][9]) {
   }
   print_frame(9);
 }
+
+
 /* add your functions here */
-
-
-/*Function to determine whether the board is complete. Returns 1 if the borad
-is complete. */
+/*Function to determine whether the board is complete. Returns 1 if the borad is complete. */
 bool is_complete(const char board[9][9]){
   for (int column=0; column<9; column++) {
     for (int row=0; row<9; row++){
@@ -84,8 +82,7 @@ bool is_complete(const char board[9][9]){
 }
 
 
-/*Function to check the validity of both "position" and "digit". Returns 1
-if both postion and digit are valid.*/
+/*Function to check the validity of both "position" and "digit". Returns 1 if both postion and digit are valid.*/
 bool make_move(const char* position, char digit, char board[9][9]){
   int row, column;
 
@@ -111,8 +108,7 @@ bool make_move(const char* position, char digit, char board[9][9]){
 }
 
 
-/* A helper function of "make_move", determining the digit validity. Returns 1
-if the digit is valid in the position.*/
+/* A helper function of "make_move", determining the digit validity. Returns 1 if the digit is valid in the position.*/
 bool is_valid(int row, int column, char digit, const char board[9][9]){
   /*Check for its column returns 0 if conflict is found.*/
   for (int i = 0; i < 9; ++i) {
@@ -128,8 +124,7 @@ bool is_valid(int row, int column, char digit, const char board[9][9]){
     }
   }
 
-  /*Check for its sub-board  by locating the sub-board that the positon
-   belongs to first. Returns 0 if conflict is found.*/
+  /*Check for its sub-board  by locating the sub-board that the positon belongs to first. Returns 0 if conflict is found.*/
   if(row/3==0){
     if(column/3==0){
       if(!is_valid_in_sub_borad(0,2,0,2,digit,board)){
@@ -179,8 +174,7 @@ bool is_valid(int row, int column, char digit, const char board[9][9]){
 }
 
 
-/*A helper function of "is_valid", determining the validity of the digit
- within its sub-borad. Returns 1 if the digit is valid inside its sub-borad.*/
+/*A helper function of "is_valid", determining the validity of the digit within its sub-borad. Returns 1 if the digit is valid inside its sub-borad.*/
 bool is_valid_in_sub_borad(int row_1, int row_2, int column_1, int column_2, char digit, const char board[9][9]){
   for(int i=row_1; i<=row_2; i++){
     for(int j=column_1; j<=column_2; j++){
@@ -216,6 +210,11 @@ bool save_board(const char* filename, const char board[9][9]){
 
 /*Function to solve board, returns 1 if a solution is found.*/
 bool solve_board(char board[9][9]){
+  //In order to calculate the number of recursions, once solve_board is called, count_called++. Once solve_board fails, count_fail++.
+  static int count_called=0;
+  static int count_fail=0;
+  count_called++;
+
   int row, column;
   row=0;
   column=0;
@@ -227,6 +226,10 @@ bool solve_board(char board[9][9]){
       row++;
       column=0;
     }else if(is_complete(board)){
+      cout<<"The number of recursions: "<<count_called<<endl;
+      //When the board is solved, reset count_called and count_fail
+      count_called=0;
+      count_fail=0;
       return 1;
     }else{
       column++;
@@ -239,9 +242,7 @@ bool solve_board(char board[9][9]){
   position_char[0] = static_cast<char>(row+65);
   position_char[1] = static_cast<char>(column+49);
 
-  /*Filling the position by attempting from digit 1 to 9 until it is valid
-   in the postion, then calls the solve_board again to solve the next unfilled
-   position.*/
+  /*Filling the position by attempting from digit 1 to 9 until it is valid in the postion, then calls the solve_board again to solve the next unfilled position.*/
   for(char attempt = '1'; attempt <='9'; attempt++){
     if(make_move(position_char, attempt, board)){
       if(solve_board(board)){
@@ -250,8 +251,15 @@ bool solve_board(char board[9][9]){
     }
   }
 
-  /*If none of the digit works, changing to position back to an unfilled state
-  and returning 0.*/
+  /*If none of the digit works, changing to position back to an unfilled state and returning 0.*/
   board[row][column] = '.';
+
+  count_fail++;
+  //When the board has no solution, reset count_called and count_fail
+  if(count_called==count_fail){
+    cout<<"The number of recursions: "<<count_called<<endl;
+    count_called=0;
+    count_fail=0;
+  }
   return 0;
 }

@@ -1,5 +1,7 @@
 Summarise your findings here (see specification).
 
-Mystery1: hard
-Mystery2: no solution
-Mystery3: extremely hard
+Mystery1: extremely hard (solve_board function called 421547 times. The board solving time is 0.26s for a specific test.)
+Mystery2: no solution (solve_board function called 11533 times. The board solving time is 0.009s for a specific test.)
+Mystery3: hard (solve_board function called 14134 times. The board solving time is 0.006s for a specific test.)
+
+PS: The board solving time varies under different conditions (e.g. the computer used to run the program), however, the board solving time for Mystery1 is always longer than that for Mystery3, which is consistent with the number of recursions.
